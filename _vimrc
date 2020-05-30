@@ -1,6 +1,9 @@
 syntax on                  " Enable syntax highlighting.
 filetype plugin indent on  " Enable file type based indentation.
 
+set nocompatible
+set hidden                 " Opening a new when buffer has unsaved changes hides instead of closes file
+
 " gvim options
 set guioptions-=m          " Remove Menu Bars
 set guioptions-=T          " Remove Tool Bar
@@ -15,8 +18,8 @@ set shiftwidth=4           " Number of spaces to use for autoindent.
 set backspace=2            " Fix backspace behavior on most terminals.
 set foldmethod=syntax
 
-set number
-set relativenumber
+set number                 " Show line number
+set relativenumber         " Show relative line number
 
 " Set up persistant undo dir
 set undofile
@@ -30,6 +33,11 @@ set wildmode=list:longest,full
 set encoding=utf-8
 
 set hlsearch
+
+if has("autocmd")
+    autocmd FileType ruby setlocal ts=2 sts=2 sw=2 expandtab
+endif
+
 " Download and install vim-plug (cross platform).
 if empty(glob(
     \ '$VIMHOME/' . (has('win32') ? 'vimfiles' : '.vim') . '/autoload/plug.vim'))
@@ -59,6 +67,8 @@ Plug 'ycm-core/YouCompleteMe'
 Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'alepez/vim-gtest'
 Plug 'tpope/vim-fugitive'
+" Fugitive github plugin'
+Plug 'tpope/vim-rhubarb'
 Plug 'vim-syntastic/syntastic'
 Plug 'fsharp/vim-fsharp', { 'for': 'fsharp', 'do': 'make fsautocomplete' }
 
@@ -74,9 +84,15 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 " automatically strip trailing whitespace on save
 autocmd BufWritePre * %s/\s\+$//e
 
+" vim-rhubard (fugitive github plugin)
+let g:github_enterprise_urls = ['https://github.qualcomm.com']
+
 " custom mappings
 nnoremap <Space> <nop>
 map <Space> <Leader>
+
+" block comment
+nnoremap <leader>c :normal 0i//<CR>
 
 " open fuzzy search
 nnoremap <C-p> :<C-u>FZF<CR>
@@ -104,15 +120,15 @@ nnoremap <leader>dD :<C-u>YcmCompleter GetDocImpresise<CR>
 
 nnoremap <leader>rf :<C-u>YcmCompleter FixIt<CR>
 nnoremap <leader>rr :<C-u>YcmCompleter RefactorRename
+nnoremap <leader>rs :<C-u>YcmRestartServer<CR>
 " Rust Java
 nnoremap <leader>ex :<C-u>YcmCompleter ExecuteCommand<CR>
-nnoremap <leader>rs :<C-u>YcmCompleter RestartServer<CR>
 " Roslyn
 nnoremap <leader>rl :<C-u>YcmCompleter ReloadSolution<CR>
 
 " GTest settings/appings
 " @TODO replace with ENV_VAR after getting it working
-let g:gtest#gtest_command = "python \"C:/gitroot/pil/bin/arm64-v8a/Release External/host/QProfilerLauncher.py\""
+let g:gtest#gtest_command = "\"C:/gitroot/pil/bin/arm64-v8a/Release External/host/QProfilerLauncher.py\" --app=VulkanDataCollectorTests --dataPath=\"savedtraces\" --nosleeponexit"
 let g:gtest#highlight_failing_tests = 1
 let g:gtest#test_filename_suffix = "Tests"
 
