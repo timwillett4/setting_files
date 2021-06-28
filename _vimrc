@@ -23,10 +23,13 @@ set relativenumber         " Show relative line number
 
 " Set up persistant undo dir
 set undofile
-set undodir="C:/tools/vim/vimfiles/undodir/"
+set undodir="$VIMHOME/vimfiles/undodir/"
 
 " Set director for swap (recovery) files
-set directory="C:/tools/vim/vimfiles/swap/"
+set directory=$VIMHOME/vimfiles/swap/"
+
+" Set director for viminfo file
+set viminfo=$VIMHOME/.viminfo
 
 set wildmenu
 set wildmode=list:longest,full
@@ -98,6 +101,31 @@ augroup omnisharp_commands
 
 augroup END
 
+" cscope abreviations
+if has('cscope')
+  set cscopetag cscopeverbose
+
+  if has('quickfix')
+    set cscopequickfix=s-,c-,d-,i-,t-,e-
+  endif
+
+  cnoreabbrev csa cs add
+  cnoreabbrev csf cs find
+  cnoreabbrev csk cs kill
+  cnoreabbrev csr cs reset
+  cnoreabbrev css cs show
+  cnoreabbrev csh cs help
+
+  command -nargs=0 Cscope cs add $VIMSRC/src/cscope.out $VIMSRC/src
+
+  " havent got thse working yet
+  "nnoremap <leader>csa :csa<cr>
+  "nnoremap <leader>csf :csf<cr>
+  "nnoremap <leader>csk :csk<cr>
+  "nnoremap <leader>csr :csr<cr>
+  "nnoremap <leader>css :css<cr>
+  "nnoremap <leader>csh :csh<cr>
+endif
 
 " this setting controls how long to wait (in ms) before fetching type / symbol information.
 set updatetime=500
@@ -155,14 +183,16 @@ if empty(glob(
 endif
 
 " Manage plugins with vim-plug.
-call plug#begin('C:/tools/vim/vimfiles/bundle')
+call plug#begin('$VIMHOME/vimfiles/bundle')
 
 Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-unimpaired'
-Plug 'tpope/vim-vinegar'
+Plug 'tpope/vim-vikegar'
 Plug 'mileszs/ack.vim'
 Plug 'easymotion/vim-easymotion'
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+"Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+"Plug 'junegunn/fzf.vim'
+Plug 'ctrlpvim/ctrlp.vim'
 Plug 'tpope/vim-projectionist'
 Plug 'elzr/vim-json'
 Plug 'dracula/vim', {'as': 'dracula'}
@@ -198,11 +228,11 @@ map <Space> <Leader>
 nnoremap <leader>c :normal 0i//<CR>
 
 " open fuzzy search
-nnoremap <C-p> :<C-u>FZF<CR>
+nnoremap <C-p> :<C-u>CtrlP<CR>
 
 " MERD TREE
 " toggle nerd tree
-nnoremap <C-s> :<C-u>NERDTreeToggle<CR>
+nnoremap <leader>s :<C-u>NERDTreeToggle<CR>
 
 " YCM Custom Mappings
 nnoremap <leader>G :<C-u>YcmCompleter GoTo<CR>
@@ -228,12 +258,6 @@ nnoremap <leader>rs :<C-u>YcmRestartServer<CR>
 nnoremap <leader>ex :<C-u>YcmCompleter ExecuteCommand<CR>
 " Roslyn
 nnoremap <leader>rl :<C-u>YcmCompleter ReloadSolution<CR>
-
-" GTest settings/appings
-" @TODO replace with ENV_VAR after getting it working
-let g:gtest#gtest_command = "\"C:/gitroot/pil/bin/arm64-v8a/Release External/host/QProfilerLauncher.py\" --app=VulkanDataCollectorTests --dataPath=\"savedtraces\" --nosleeponexit"
-let g:gtest#highlight_failing_tests = 1
-let g:gtest#test_filename_suffix = "Tests"
 
 augroup GTest
 	autocmd FileType cpp nnoremap <silent> <leader>tt :GTestRun<CR>
