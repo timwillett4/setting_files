@@ -23,10 +23,11 @@ set relativenumber         " Show relative line number
 
 " Set up persistant undo dir
 set undofile
-set undodir="$VIMHOME/vimfiles/undodir/"
+set undodir=$VIMHOME/vimfiles/.undo//
 
 " Set director for swap (recovery) files
-set directory=$VIMHOME/vimfiles/swap/"
+set directory=$VIMHOME/vimfiles/.swap//
+set backupdir=$VIMHOME/vimfiles/.backup//
 
 " Set director for viminfo file
 set viminfo=$VIMHOME/.viminfo
