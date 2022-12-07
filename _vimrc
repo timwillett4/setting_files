@@ -57,7 +57,7 @@ set smarttab      " insert tabs on the start of a line according to
                     "    shiftwidth, not tabstop
 set hlsearch      " highlight search terms
 set incsearch     " show search matches as you type
-set foldlevel=1   " expand folds by default
+set foldlevel=0   " expand folds by default
 
 "Move the preview window (code documentation) to the bottom of the screen, so it doesn't move the code!
 "You might also want to look at the echodoc plugin
@@ -205,9 +205,18 @@ Plug 'vim-syntastic/syntastic'
 Plug 'fsharp/vim-fsharp', { 'for': 'fsharp', 'do': 'make fsautocomplete' }
 Plug 'rhysd/vim-clang-format'
 Plug 'gfontenot/vim-xcode'
+Plug 'airblade/vim-gitgutter' 
+Plug 'vim-airline/vim-airline'
+Plug 'tpope/vim-sensible'
+Plug 'tpope/vim-surround'
+"Plug 'dense-analysis/ale'
+Plug 'preservim/tagbar'
+Plug 'garbas/vim-snipmate'
+Plug 'godlygeek/tabular'
+Plug 'tpope/vim-commentary'
 call plug#end()
 
-" colorscheme dracula
+colorscheme dracula
 
 let c_no_curly_error = 1
 
@@ -225,10 +234,10 @@ nnoremap <Space> <nop>
 map <Space> <Leader>
 
 " block comment
-nnoremap <leader>c :normal 0i//<CR>
+nnoremap <leader>c :normal 0^i//<CR>
 
 " open fuzzy search
-nnoremap <C-p> :<C-u>CtrlP<CR>
+nnoremap <C-p> :<C-u>CtrlP .<CR>
 
 " MERD TREE
 " toggle nerd tree
@@ -287,3 +296,5 @@ nmap <Leader>C :ClangFormatAutoToggle<CR>
 let g:xcode_workspace_file = '~/repos/DlpeMac/Mac/DLP/Build/DLPeMac.xcworkspace/contents.xcworkspacedata'
 let g:xcode_default_scheme = 'BuildAll'
 
+" tagbar mappings
+nnoremap <leader>d :TagbarToggle<CR>
