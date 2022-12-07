@@ -21,16 +21,20 @@ set foldmethod=syntax
 set number                 " Show line number
 set relativenumber         " Show relative line number
 
+
+" tell vim where to put swap files
+if empty(glob('~/.vim/tmp'))
+    silent !mkdir -p ~/.vim/tmp
+endif
+set dir=~/.vim/tmp
+set backupdir=/Users/twillett/.vim/tmp
+
 " Set up persistant undo dir
 set undofile
-set undodir=$VIMHOME/vimfiles/.undo//
-
-" Set director for swap (recovery) files
-set directory=$VIMHOME/vimfiles/.swap//
-set backupdir=$VIMHOME/vimfiles/.backup//
+set undodir='~/.vim/tmp/.undo//'
 
 " Set director for viminfo file
-set viminfo=$VIMHOME/.viminfo
+set viminfo+=n~/.vim/.viminfo
 
 set wildmenu
 set wildmode=list:longest,full
@@ -53,6 +57,7 @@ set smarttab      " insert tabs on the start of a line according to
                     "    shiftwidth, not tabstop
 set hlsearch      " highlight search terms
 set incsearch     " show search matches as you type
+set foldlevel=1   " expand folds by default
 
 "Move the preview window (code documentation) to the bottom of the screen, so it doesn't move the code!
 "You might also want to look at the echodoc plugin
@@ -161,38 +166,31 @@ inoremap <C-Space> <c-x><c-o>
 
 nnoremap <c-u><c-d> :OmniSharpRunTestFixture<cr>
 
-set nocompatible
-source $VIMRUNTIME/mswin.vim
+" set nocompatible
+" source $VIMRUNTIME/mswin.vim
 
-behave mswin
+" behave mswin
 
 if has("autocmd")
     autocmd FileType ruby setlocal ts=2 sts=2 sw=2 expandtab
 endif
 
 " Download and install vim-plug (cross platform).
-if empty(glob(
-    \ '$VIMHOME/' . (has('win32') ? 'vimfiles' : '.vim') . '/autoload/plug.vim'))
-  execute '!curl -fLo ' .
-    \ (has('win32') ? "C:/tools/vim/vimfiles" : '$HOME/.vim') .
-    \ '/autoload/plug.vim --create-dirs ' .
-    \ 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  autocmd VimEnter *
-    \  if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
-    \|   PlugInstall --sync | q
-    \| endif
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 endif
 
 " Manage plugins with vim-plug.
-call plug#begin('$VIMHOME/vimfiles/bundle')
+call plug#begin('~/.vim/plugged')
 
 Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-unimpaired'
-Plug 'tpope/vim-vikegar'
+"Plug 'tpope/vim-vikegar'
 Plug 'mileszs/ack.vim'
 Plug 'easymotion/vim-easymotion'
-"Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-"Plug 'junegunn/fzf.vim'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'tpope/vim-projectionist'
 Plug 'elzr/vim-json'
@@ -205,10 +203,11 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
 Plug 'vim-syntastic/syntastic'
 Plug 'fsharp/vim-fsharp', { 'for': 'fsharp', 'do': 'make fsautocomplete' }
-
+Plug 'rhysd/vim-clang-format'
+Plug 'gfontenot/vim-xcode'
 call plug#end()
 
-colorscheme dracula         " Change a colorscheme.
+" colorscheme dracula
 
 let c_no_curly_error = 1
 
@@ -216,10 +215,10 @@ let NERDTreeShowBookmarks = 1  " Display bookmarks on startup.
 "autocmd VimEnter * NERDTree  " Enable NERDTree on Vim startup.
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 " automatically strip trailing whitespace on save
-autocmd BufWritePre * %s/\s\+$//e
+" autocmd BufWritePre * %s/\s\+$//e
 
 " vim-rhubard (fugitive github plugin)
-let g:github_enterprise_urls = ['https://github.qualcomm.com']
+" let g:github_enterprise_urls = ['https://github.qualcomm.com']
 
 " custom mappings
 nnoremap <Space> <nop>
@@ -272,4 +271,19 @@ augroup GTest
 	autocmd FileType cpp nnoremap <silent> <leader>tj :GTestJump<CR>
 	autocmd FileType cpp nnoremap          <leader>ti :GTestNewTest<CR>i
 augroup END
+
+" clang-format settings
+let g:clang_format#autoformat_on_insert_leave = 1
+let g:clang_format#detect_style_file = 1
+
+" map to <Leader>cf in C++ code
+autocmd FileType c,cpp,objc nnoremap <buffer><Leader>cf :<C-u>ClangFormat<CR>
+autocmd FileType c,cpp,objc vnoremap <buffer><Leader>cf :ClangFormat<CR>
+" if you install vim-operator-user
+autocmd FileType c,cpp,objc map <buffer><Leader>x <Plug>(operator-clang-format)
+" Toggle auto formatting:
+nmap <Leader>C :ClangFormatAutoToggle<CR>
+
+let g:xcode_workspace_file = '~/repos/DlpeMac/Mac/DLP/Build/DLPeMac.xcworkspace/contents.xcworkspacedata'
+let g:xcode_default_scheme = 'BuildAll'
 
