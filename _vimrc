@@ -211,9 +211,10 @@ Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
 "Plug 'dense-analysis/ale'
 Plug 'preservim/tagbar'
-Plug 'garbas/vim-snipmate'
+"Plug 'garbas/vim-snipmate'
 Plug 'godlygeek/tabular'
 Plug 'tpope/vim-commentary'
+Plug 'pboettch/vim-cmake-syntax'
 call plug#end()
 
 colorscheme dracula
