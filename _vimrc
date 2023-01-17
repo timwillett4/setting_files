@@ -185,14 +185,12 @@ endif
 call plug#begin('~/.vim/plugged')
 
 Plug 'scrooloose/nerdtree'
-Plug 'tpope/vim-unimpaired'
 "Plug 'tpope/vim-vikegar'
 Plug 'mileszs/ack.vim'
 Plug 'easymotion/vim-easymotion'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'tpope/vim-projectionist'
 Plug 'elzr/vim-json'
 Plug 'dracula/vim', {'as': 'dracula'}
 Plug 'ycm-core/YouCompleteMe'
@@ -207,14 +205,17 @@ Plug 'rhysd/vim-clang-format'
 Plug 'gfontenot/vim-xcode'
 Plug 'airblade/vim-gitgutter' 
 Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'tpope/vim-projectionist'
+Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
-"Plug 'dense-analysis/ale'
-Plug 'preservim/tagbar'
-"Plug 'garbas/vim-snipmate'
-Plug 'godlygeek/tabular'
 Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-dispatch'
+Plug 'preservim/tagbar'
+Plug 'godlygeek/tabular'
 Plug 'pboettch/vim-cmake-syntax'
+Plug 'gilligan/vim-lldb'
 call plug#end()
 
 colorscheme dracula
@@ -299,3 +300,11 @@ let g:xcode_default_scheme = 'BuildAll'
 
 " tagbar mappings
 nnoremap <leader>d :TagbarToggle<CR>
+
+" airline settingsj:w
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
+let g:airline_theme='angr'
+
+set makeprg=sh
+
